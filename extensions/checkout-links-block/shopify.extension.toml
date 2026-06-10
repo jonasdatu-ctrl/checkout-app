@@ -1,0 +1,122 @@
+# Learn more about configuring your checkout UI extension:
+# https://shopify.dev/docs/api/checkout-ui-extensions/latest/configuration
+
+# The version of APIs your extension will receive. Learn more:
+# https://shopify.dev/docs/api/usage/versioning
+api_version = "2026-04"
+
+[[extensions]]
+name = "checkout-links-block"
+handle = "checkout-links-block"
+type = "ui_extension"
+uid = "97c86b9d-a5f8-cf43-f3f6-6f65922755e16a020bb4"
+
+# Controls where in Shopify your extension will be injected,
+# and the file that contains your extension’s source code. Learn more:
+# https://shopify.dev/docs/api/checkout-ui-extensions/latest/extension-targets-overview
+
+# Flexible block — merchant drags it anywhere in checkout editor
+[[extensions.targeting]]
+module = "./src/Checkout.jsx"
+target = "purchase.checkout.block.render"
+
+# Static placement — always renders directly above the Pay Now button
+[[extensions.targeting]]
+module = "./src/Checkout.jsx"
+target = "purchase.checkout.actions.render-before"
+
+[extensions.capabilities]
+# Gives your extension access to directly query Shopify’s storefront API.
+# https://shopify.dev/docs/api/checkout-ui-extensions/latest/configuration#api-access
+api_access = true
+
+# Gives your extension access to make external network calls, using the
+# JavaScript `fetch()` API. Learn more:
+# https://shopify.dev/docs/api/checkout-ui-extensions/latest/configuration#network-access
+# network_access = true
+
+# Defines settings that will be collected from merchants installing
+# your extension. Learn more:
+# https://shopify.dev/docs/api/checkout-ui-extensions/latest/configuration#settings-definition
+
+[extensions.settings]
+
+# ── Message appearance ────────────────────────────────────────────────────────
+
+[[extensions.settings.fields]]
+key = "message_template"
+type = "multi_line_text_field"
+name = "Message template"
+description = "Use {token} placeholders where links should appear, e.g. By placing your order you agree to our {terms} and {privacy}."
+
+[[extensions.settings.fields]]
+key = "message_alignment"
+type = "single_line_text_field"
+name = "Message alignment"
+description = "Text alignment: left, center, or right (default: left)"
+
+[[extensions.settings.fields]]
+key = "message_size"
+type = "single_line_text_field"
+name = "Message font size"
+description = "Message size: small, base, or large. Note: large uses base text style to avoid heading-like font weight."
+
+# ── Link appearance ───────────────────────────────────────────────────────────
+
+[[extensions.settings.fields]]
+key = "link_color"
+type = "single_line_text_field"
+name = "Link color"
+description = "Supported values: auto, neutral, info, success, warning, critical"
+
+# ── Link 1 ────────────────────────────────────────────────────────────────────
+
+[[extensions.settings.fields]]
+key = "link_1_token"
+type = "single_line_text_field"
+name = "Link 1 — Token"
+description = "Token name without braces used in Message template, e.g. terms"
+
+[[extensions.settings.fields]]
+key = "link_1_label"
+type = "single_line_text_field"
+name = "Link 1 — Label"
+description = "Visible link text displayed in the message"
+
+[[extensions.settings.fields]]
+key = "link_1_modal_title"
+type = "single_line_text_field"
+name = "Link 1 — Modal title"
+description = "Heading shown at the top of the popup"
+
+[[extensions.settings.fields]]
+key = "link_1_modal_body"
+type = "multi_line_text_field"
+name = "Link 1 — Modal body"
+description = "Popup content. Each new line renders as a separate paragraph."
+
+# ── Link 2 ────────────────────────────────────────────────────────────────────
+
+[[extensions.settings.fields]]
+key = "link_2_token"
+type = "single_line_text_field"
+name = "Link 2 — Token"
+description = "Token name without braces used in Message template, e.g. privacy"
+
+[[extensions.settings.fields]]
+key = "link_2_label"
+type = "single_line_text_field"
+name = "Link 2 — Label"
+description = "Visible link text displayed in the message"
+
+[[extensions.settings.fields]]
+key = "link_2_modal_title"
+type = "single_line_text_field"
+name = "Link 2 — Modal title"
+description = "Heading shown at the top of the popup"
+
+[[extensions.settings.fields]]
+key = "link_2_modal_body"
+type = "multi_line_text_field"
+name = "Link 2 — Modal body"
+description = "Popup content. Each new line renders as a separate paragraph."
