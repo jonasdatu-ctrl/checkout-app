@@ -106,9 +106,42 @@ function renderMessageTemplate(template, linksByToken) {
 }
 
 function renderModalBody(body) {
-  return body
-    .split("\n")
-    .map((line, i) => <s-paragraph key={i}>{line || "\u00A0"}</s-paragraph>);
+  return body.split("\n").map((line, i) => {
+    const { text, small, textType } = parseLineStyle(line);
+    const content = text || "\u00A0";
+    const inner = textType ? (
+      <s-text type={textType}>{content}</s-text>
+    ) : (
+      content
+    );
+    if (small) {
+      return (
+        <s-paragraph key={i} type="small">
+          {inner}
+        </s-paragraph>
+      );
+    }
+    return <s-paragraph key={i}>{inner}</s-paragraph>;
+  });
+}
+
+function parseLineStyle(line) {
+  const match = line.match(/^\[([^\]]+)\](.*)/);
+  if (!match) return { text: line, small: false, textType: null };
+
+  const directives = match[1].split(",").map((d) => d.trim().toLowerCase());
+  const text = match[2];
+
+  let small = false;
+  let textType = null;
+
+  for (const directive of directives) {
+    if (directive === "small") small = true;
+    else if (directive === "bold") textType = "strong";
+    else if (directive === "italic") textType = "offset";
+  }
+
+  return { text, small, textType };
 }
 
 function normalizeAlignment(value) {
