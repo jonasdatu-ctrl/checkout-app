@@ -107,41 +107,46 @@ function renderMessageTemplate(template, linksByToken) {
 
 function renderModalBody(body) {
   return body.split("\n").map((line, i) => {
-    const { text, small, textType } = parseLineStyle(line);
+    const { text, small, textType, textAlign } = parseLineStyle(line);
     const content = text || "\u00A0";
     const inner = textType ? (
       <s-text type={textType}>{content}</s-text>
     ) : (
       content
     );
-    if (small) {
-      return (
-        <s-paragraph key={i} type="small">
-          {inner}
-        </s-paragraph>
-      );
-    }
-    return <s-paragraph key={i}>{inner}</s-paragraph>;
+    const props = {};
+    if (small) props.type = "small";
+    if (textAlign) props.textAlign = textAlign;
+    return (
+      <s-paragraph key={i} {...props}>
+        {inner}
+      </s-paragraph>
+    );
   });
 }
 
 function parseLineStyle(line) {
   const match = line.match(/^\[([^\]]+)\](.*)/);
-  if (!match) return { text: line, small: false, textType: null };
+  if (!match)
+    return { text: line, small: false, textType: null, textAlign: null };
 
   const directives = match[1].split(",").map((d) => d.trim().toLowerCase());
   const text = match[2];
 
   let small = false;
   let textType = null;
+  let textAlign = null;
 
   for (const directive of directives) {
     if (directive === "small") small = true;
     else if (directive === "bold") textType = "strong";
     else if (directive === "italic") textType = "offset";
+    else if (directive === "left") textAlign = "start";
+    else if (directive === "center") textAlign = "center";
+    else if (directive === "right") textAlign = "end";
   }
 
-  return { text, small, textType };
+  return { text, small, textType, textAlign };
 }
 
 function normalizeAlignment(value) {
